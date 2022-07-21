@@ -33,7 +33,7 @@ def get_desired_role(user: str, desired_role: str) -> Dict[str,str]:
 can_access_desired_role = check_desired_role(user=args.user, desired_role=args.desired_role)
 if not can_access_desired_role:
     if args.mode == "check":
-        print("Invalid role.\n  Available roles are:\n {}".format('\n'.join([role['name'] for role in get_available_roles(user=args.user)])))
+        print("Could not find matching role for: {0}.\n\nAvailable roles are:\n{1}".format(args.desired_role, '\n'.join([role['name'] for role in get_available_roles(user=args.user)])))
     sys.exit(1)
 
 if args.mode == "print_arn":
