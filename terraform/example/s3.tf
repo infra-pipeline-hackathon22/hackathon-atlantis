@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "b" {
-  bucket = "benjamins-bucket"
+  bucket = "benjamins-buckets"
 }
 
 resource "aws_s3_bucket_acl" "bucket_acl" {
