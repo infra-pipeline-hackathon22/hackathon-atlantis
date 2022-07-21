@@ -1,0 +1,10 @@
+workflows:
+  authworkflow:
+    apply:
+      steps:
+        # Again, you must use the $PLANFILE environment variable.
+        - env:
+            name: ENV_EXAMPLE
+            value: secret
+        - run: ./identity.py
+        - run: terraform apply $PLANFILE
