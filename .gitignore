@@ -30,3 +30,7 @@ override.tf.json
 
 # Intellij
 .idea
+
+# VSCode
+.vscode/
+!**/workspace-setup/.vscode
