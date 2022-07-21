@@ -16,10 +16,10 @@ variable "role_arn_override" {
 
 provider "aws" {
   region = "us-west-2"
-  assume_role {
-    role_arn = var.role_arn_override
-    session_name = "my_session"
-  }
+  # assume_role {
+  #   role_arn = var.role_arn_override
+  #   session_name = "my_session"
+  # }
 }
 
 
