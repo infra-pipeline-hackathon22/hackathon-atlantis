@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from time import strftime
 from typing import Dict, List
 import boto3
 import os
@@ -13,31 +14,30 @@ parser.add_argument('--mode', type=str, default="check")
 args = parser.parse_args()
 
 def get_available_roles(user: str) -> List[Dict[str,str]]:
+    # FIXME: update this with actual roles that can be assumed by user
     iam_client = boto3.client('iam')
     response = iam_client.list_roles()
     roles = (response['Roles'])
-    print('roles found: ' + str(len(roles)))  
-    return [{"role":role['RoleName'], "arn":role['Arn']} for role in roles]
-
-def check_desired_role(user: str, desired_role: str) -> str:
-    roles = get_available_roles(user=user)
-    return roles[0]['role']
-        
-    # iam_client = boto3.client('iam')
-    # response = iam_client.list_roles()
-    # roles = (response['Roles'])
     # print('roles found: ' + str(len(roles)))  
-    # for role in roles:
-    #     print(role['RoleName'])
-    #     print(role['Arn'])
+    return [{"name":role['RoleName'], "arn":role['Arn']} for role in roles]
 
-if args.mode == "check":
-    if not check_desired_role(user=args.user, desired_role=args.desired_role):
-        print("Invalid role.\n  Available roles are: {'\n'.join([role['role'] for role in get_available_roles(user=user)])}")
-        sys.exit(1)
-else:
-    print ("NYI")
-    # print_checked_role(user=args.user, desired_role=args.desired_role)
+def check_desired_role(user: str, desired_role: str) -> bool:
+    roles = get_available_roles(user=user)
+    return desired_role in [role['name'] for role in roles]
+
+def get_desired_role(user: str, desired_role: str) -> Dict[str,str]:
+    roles = get_available_roles(user=user)
+    candidate_roles = list(filter(lambda role: desired_role in role['name'], roles))
+    return candidate_roles[0]
+
+can_access_desired_role = check_desired_role(user=args.user, desired_role=args.desired_role)
+if not can_access_desired_role:
+    if args.mode == "check":
+        print("Invalid role.\n  Available roles are:\n {}".format('\n'.join([role['name'] for role in get_available_roles(user=args.user)])))
+    sys.exit(1)
+
+if args.mode == "print_arn":
+    print(f"{get_desired_role(user=args.user, desired_role=args.desired_role)['arn']}")
 
 
 def list_all_buckets_example():
@@ -56,7 +56,7 @@ def list_all_buckets_example():
         aws_session_token=credentials['SessionToken'],
     )
 
-# Use the Amazon S3 resource object that is now configured with the 
-# credentials to access your S3 buckets. 
-for bucket in s3_resource.buckets.all():
-    print(bucket.name)
+    # Use the Amazon S3 resource object that is now configured with the 
+    # credentials to access your S3 buckets. 
+    for bucket in s3_resource.buckets.all():
+        print(bucket.name)
