@@ -7,8 +7,25 @@ terraform {
   }
 }
 
+variable "role" {
+  type = set(object(
+  {
+    role_arn     = string
+    session_name = string
+  }))
+  default = []
+}
+
 provider "aws" {
-  region = "us-east-1"
+  region = "us-west-2"
+  dynamic "assume_role" {
+    for_each = var.role
+    content {
+      role_arn = assume_role.value.role_arn
+      session_name = assume_role.value.session_name
+    }
+  }
+
 }
 
 module "atlantis_role" {
@@ -40,4 +57,8 @@ module "test_readwrite" {
 
 output "atlantis" {
   value = module.atlantis_role.role.arn
+}
+
+output "test_readwrite" {
+  value = module.test_readwrite.role.arn
 }
