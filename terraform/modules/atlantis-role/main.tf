@@ -45,6 +45,15 @@ resource "aws_iam_role_policy" "policy" {
   role   = aws_iam_role.role.id
 }
 
+data "aws_iam_policy" "readonly" {
+  name = "ReadOnlyAccess"
+}
+
+resource "aws_iam_policy_attachment" "readonly" {
+  name       = aws_iam_role.role.name
+  policy_arn = data.aws_iam_policy.readonly.arn
+}
+
 output "role" {
   value = aws_iam_role.role
 }

@@ -31,3 +31,7 @@ resource "aws_iam_role_policy" "policy" {
   policy = var.role_policy
   role   = aws_iam_role.role.id
 }
+
+output "role" {
+  value = aws_iam_role.role
+}

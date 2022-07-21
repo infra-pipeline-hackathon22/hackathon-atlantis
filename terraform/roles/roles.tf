@@ -38,6 +38,31 @@ module "test_readwrite" {
   atlantis_role_arn = module.atlantis_role.role.arn
 }
 
+data "aws_iam_policy_document" "admin_readwrite" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "*:*"
+    ]
+    resources = ["*"]
+  }
+}
+
+module "admin_readwrite" {
+  source = "../modules/eng-role"
+  role_name = "admin-readwrite"
+  role_policy = data.aws_iam_policy_document.admin_readwrite.json
+  atlantis_role_arn = module.atlantis_role.role.arn
+}
+
 output "atlantis" {
   value = module.atlantis_role.role.arn
+}
+
+output "test_readwrite" {
+  value = module.test_readwrite.role.arn
+}
+
+output "admin-readwrite" {
+  value = module.admin_readwrite.role.arn
 }
