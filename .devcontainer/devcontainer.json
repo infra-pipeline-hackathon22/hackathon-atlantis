@@ -1,0 +1,76 @@
+{
+	"name": "Container Build and Sign Demo",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"extensions": [
+		"ms-python.python",
+		"eamodio.gitlens",
+		"ms-python.vscode-pylance",
+		"visualstudioexptteam.vscodeintellicode",
+		"cstrap.python-snippets",
+		"asciidoctor.asciidoctor-vscode",
+		"hashicorp.terraform",
+		"davidanson.vscode-markdownlint",
+		"bierner.markdown-preview-github-styles",
+		"yzhang.markdown-all-in-one",
+		"robole.markdown-snippets",
+		"humao.rest-client",
+		"bazelbuild.vscode-bazel",
+		"tsandall.opa",
+		"ms-azuretools.vscode-docker"
+	],
+	"settings": {
+		"python.defaultInterpreterPath": "${workspaceFolder}/demo/python/cosign-provider/.venv/bin/python3.9",
+		"python.pythonPath": "${workspaceFolder}/demo/python/cosign-provider/.venv/bin/python3.9",
+		"python.autoComplete.extraPaths": [
+			"./demo/python/cosign-provider/"
+		],
+		"python.testing.pytestArgs": [
+			"."
+		],
+		"python.testing.unittestEnabled": false,
+		"python.testing.nosetestsEnabled": false,
+		"python.testing.pytestEnabled": true,
+		"python.linting.pylintEnabled": true,
+		"python.linting.pylintPath": "/usr/local/bin/pylint",
+		"python.linting.enabled": true,
+		"terminal.integrated.shell.linux": "/bin/zsh",
+		"python.analysis.typeCheckingMode": "basic",
+		"workbench.colorTheme": "Default Light+",
+		"editor.acceptSuggestionOnEnter": "smart",
+		"editor.tabCompletion": "on",
+		"editor.snippetSuggestions": "top",
+		"bazel.buildifierExecutable": "/usr/local/bin/buildifier",
+		"bazel.executable": "/bin/bazel",
+		"bazel.enableCodeLens": true
+	},
+	"containerEnv": {
+		// used with the postCreateCommand to log into aws via SSO.  Assumes a profile has been configured in the 
+		// host users ~/.aws/config file (see volume mounts below)   
+		"SSO_PROFILE": "${env:BURNER_SSO_PROFILE}",
+		// profile to use after login via SSO profile.  Usually this maps to an role assumption in a bespoke account
+		"AWS_PROFILE": "${env:BURNER_AWS_PROFILE}",
+		"AWS_REGION": "ap-southeast-2",
+		"REPO_HOME": "${containerWorkspaceFolder}",
+		"REPO_ROOT": "${containerEnv:REPO_HOME}",
+		"REPO_HOME_HOST": "${localWorkspaceFolder}",
+	},
+	"initializeCommand": "./.devcontainer/workspace-setup/workspace-initialize.sh",
+	"postAttachCommand": "git config --add oh-my-zsh.hide-dirty 1",
+	"postCreateCommand": "./.devcontainer/workspace-setup/workspace-post-create.sh ${containerWorkspaceFolder}",
+	// Comment out the next line to run as root instead. Linux users, 
+	// update Dockerfile with your user's UID/GID if not 1000.
+	"runArgs": [ 
+		"-v", "/var/run/docker.sock.raw:/var/run/docker.sock",
+		"-v", "${env:HOME}/.aws:/home/vscode/.aws",
+		"-v", "${env:HOME}/.gitconfig:/home/vscode/.gitconfig",
+		"-u", "vscode",
+//		"-v", "${localWorkspaceFolder}/.devcontainer/mount/nix-store:/nix/store",
+//		"-v", "${localWorkspaceFolder}/.devcontainer/mount/bazel-cache:/home/vscode/.cache"
+
+		// use local .oh-my-zsh configuration if it exists (overwriting one in container).
+		// uncomment the following line out if you want to use local installation on host
+		//"-v", "${env:HOME}/.oh-my-zsh:/home/jboss/.oh-my-zsh",
+	]
+}
