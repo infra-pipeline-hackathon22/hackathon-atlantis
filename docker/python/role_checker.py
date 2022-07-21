@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from time import strftime
 from typing import Dict, List
 import boto3
 import os
@@ -30,16 +29,6 @@ def get_desired_role(user: str, desired_role: str) -> Dict[str,str]:
     candidate_roles = list(filter(lambda role: desired_role in role['name'], roles))
     return candidate_roles[0]
 
-can_access_desired_role = check_desired_role(user=args.user, desired_role=args.desired_role)
-if not can_access_desired_role:
-    if args.mode == "check":
-        print("Could not find matching role for: {0}.\n\nAvailable roles are:\n{1}".format(args.desired_role, '\n'.join([role['name'] for role in get_available_roles(user=args.user)])))
-    sys.exit(1)
-
-if args.mode == "print_arn":
-    print(f"{get_desired_role(user=args.user, desired_role=args.desired_role)['arn']}")
-
-
 def list_all_buckets_example():
     client = boto3.client('sts')
     assumed_role_object=client.assume_role(RoleArn="arn:aws:iam::240508968475:role/atlantis/test-readwrite", RoleSessionName="mys3role")
@@ -60,3 +49,20 @@ def list_all_buckets_example():
     # credentials to access your S3 buckets. 
     for bucket in s3_resource.buckets.all():
         print(bucket.name)
+
+def main():
+    user = args.user
+    desired_role = args.desired_role.replace('\\','')
+
+    can_access_desired_role = check_desired_role(user=user, desired_role=desired_role)
+    if not can_access_desired_role:
+        if args.mode == "check":
+            print("Could not find matching role for: {0}.\n\nAvailable roles are:\n{1}".format(desired_role, '\n'.join([role['name'] for role in get_available_roles(user=user)])))
+        sys.exit(1)
+
+    if args.mode == "print_arn":
+        print(f"{get_desired_role(user=user, desired_role=desired_role)['arn']}")
+
+
+if __name__ == "__main__":
+    main()
