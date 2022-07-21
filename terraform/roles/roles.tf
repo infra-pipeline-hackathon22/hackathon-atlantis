@@ -55,10 +55,32 @@ module "test_readwrite" {
   atlantis_role_arn = module.atlantis_role.role.arn
 }
 
+data "aws_iam_policy_document" "power_readwrite" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:*",
+      "ec2:*",
+    ]
+    resources = ["*"]
+  }
+}
+
+module "power_readwrite" {
+  source = "../modules/eng-role"
+  role_name = "power-readwrite"
+  role_policy = data.aws_iam_policy_document.power_readwrite.json
+  atlantis_role_arn = module.atlantis_role.role.arn
+}
+
 output "atlantis" {
   value = module.atlantis_role.role.arn
 }
 
 output "test_readwrite" {
   value = module.test_readwrite.role.arn
+}
+
+output "power_readwrite" {
+  value = module.power_readwrite.role.arn
 }
