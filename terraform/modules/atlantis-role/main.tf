@@ -50,7 +50,8 @@ data "aws_iam_policy" "readonly" {
 }
 
 resource "aws_iam_policy_attachment" "readonly" {
-  name       = aws_iam_role.role.name
+  name       = "atlantis"
+  roles      = [aws_iam_role.role.name]
   policy_arn = data.aws_iam_policy.readonly.arn
 }
 
