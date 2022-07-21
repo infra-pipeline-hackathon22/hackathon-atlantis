@@ -49,9 +49,8 @@ data "aws_iam_policy" "readonly" {
   name = "ReadOnlyAccess"
 }
 
-resource "aws_iam_policy_attachment" "readonly" {
-  name       = "atlantis"
-  roles      = [aws_iam_role.role.name]
+resource "aws_iam_role_policy_attachment" "readonly" {
+  role       = aws_iam_role.role.name
   policy_arn = data.aws_iam_policy.readonly.arn
 }
 
