@@ -11,7 +11,5 @@ RUN python3 -m ensurepip
 ADD requirements.txt /tmp
 RUN pip3 install --no-cache --upgrade pip setuptools && pip3 install -r /tmp/requirements.txt
 WORKDIR /app
-COPY identity.py roles.json .
-
 
 USER atlantis
