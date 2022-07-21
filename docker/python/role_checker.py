@@ -24,31 +24,24 @@ def check_desired_role(user: str, desired_role: str) -> bool:
     roles = get_available_roles(user=user)
     return desired_role in [role['name'] for role in roles]
 
-def get_desired_role(user: str, desired_role: str) -> Dict[str,str]:
+def get_desired_role_info(user: str, desired_role: str) -> Dict[str,str]:
     roles = get_available_roles(user=user)
     candidate_roles = list(filter(lambda role: desired_role in role['name'], roles))
     return candidate_roles[0]
 
-def list_all_buckets_example():
+def get_env_for_role(desired_role_arn:str)->Dict[str,str]:
     client = boto3.client('sts')
-    assumed_role_object=client.assume_role(RoleArn="arn:aws:iam::240508968475:role/atlantis/test-readwrite", RoleSessionName="mys3role")
+    assumed_role_object=client.assume_role(RoleArn=desired_role_arn, RoleSessionName="mys3role")
     # From the response that contains the assumed role, get the temporary 
     # credentials that can be used to make subsequent API calls
     credentials=assumed_role_object['Credentials']
 
-    # Use the temporary credentials that AssumeRole returns to make a 
-    # connection to Amazon S3  
-    s3_resource=boto3.resource(
-        's3',
-        aws_access_key_id=credentials['AccessKeyId'],
-        aws_secret_access_key=credentials['SecretAccessKey'],
-        aws_session_token=credentials['SessionToken'],
-    )
+    return {
+        "AWS_ACCESS_KEY_ID":credentials['AccessKeyId'],
+        "AWS_SECRET_ACCESS_KEY":credentials['SecretAccessKey'],
+        "AWS_SESSION_TOKEN":credentials['SessionToken']
+    }
 
-    # Use the Amazon S3 resource object that is now configured with the 
-    # credentials to access your S3 buckets. 
-    for bucket in s3_resource.buckets.all():
-        print(bucket.name)
 
 def main():
     user = args.user
@@ -60,8 +53,12 @@ def main():
             print("Could not find matching role for: {0}.\n\nAvailable roles are:\n{1}".format(desired_role, '\n'.join([role['name'] for role in get_available_roles(user=user)])))
         sys.exit(1)
 
+    desired_role_arn = get_desired_role_info(user=user, desired_role=desired_role)['arn']
     if args.mode == "print_arn":
-        print(f"{get_desired_role(user=user, desired_role=desired_role)['arn']}")
+        print(f"{desired_role_arn}")
+
+    if args.mode == "env":
+        print(','.join([f"{k}={v}" for k,v in get_env_for_role(desired_role_arn=desired_role_arn).items()]))
 
 
 if __name__ == "__main__":
