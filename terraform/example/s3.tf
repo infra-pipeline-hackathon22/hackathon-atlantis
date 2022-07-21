@@ -8,6 +8,21 @@ terraform {
   required_version = "~> 1.0"
 }
 
+variable "role_arn_override" {
+  type = string
+  default = ""
+  description = "The role to assume.  Leave blank to assume no role and use default aws credentials"
+}
+
+provider "aws" {
+  region = "us-west-2"
+  assume_role {
+    role_arn = var.role_arn_override
+    session_name = "my_session"
+  }
+}
+
+
 data "aws_partition" "current" {}
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
