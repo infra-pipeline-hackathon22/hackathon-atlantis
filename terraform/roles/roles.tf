@@ -8,16 +8,24 @@ terraform {
 }
 
 variable "role" {
-  type = string
-  default = "arn:aws:iam::240508968475:role/atlantis"
+  type = set(object(
+  {
+    role_arn     = string
+    session_name = string
+  }))
+  default = []
 }
 
 provider "aws" {
   region = "us-west-2"
-  assume_role {
-    role_arn     = var.role
-    session_name = "atlantis"
+  dynamic "assume_role" {
+    for_each = var.role
+    content {
+      role_arn = assume_role.value.role_arn
+      session_name = assume_role.value.session_name
+    }
   }
+
 }
 
 module "atlantis_role" {
