@@ -10,6 +10,8 @@ parser = argparse.ArgumentParser(description='Check role for user')
 parser.add_argument('--user', type=str )
 parser.add_argument('--desired_role', type=str)
 parser.add_argument('--mode', type=str, default="check")
+# effectively exclude nothing by default as = can't be in environment name
+parser.add_argument('--env_exclude', type=str, default="=") 
 args = parser.parse_args()
 
 def get_available_roles(user: str) -> List[Dict[str,str]]:
@@ -31,6 +33,11 @@ def get_desired_role_info(user: str, desired_role: str) -> Dict[str,str]:
 
 def get_env_for_role(desired_role_arn:str)->Dict[str,str]:
     client = boto3.client('sts')
+    # return {
+    #     "AWS_ACCESS_KEY_ID":"foo",
+    #     "AWS_SECRET_ACCESS_KEY":"bar",
+    #     "AWS_SESSION_TOKEN":"baz"
+    # }
     assumed_role_object=client.assume_role(RoleArn=desired_role_arn, RoleSessionName="mys3role")
     # From the response that contains the assumed role, get the temporary 
     # credentials that can be used to make subsequent API calls
@@ -57,9 +64,13 @@ def main():
     if args.mode == "print_arn":
         print(f"{desired_role_arn}")
 
-    if args.mode == "env":
-        print(','.join([f"{k}={v}" for k,v in get_env_for_role(desired_role_arn=desired_role_arn).items()]))
-
-
+    if "env" in args.mode:
+        excluded_env_vars=args.env_exclude.split(",")
+        filter_env_dict=dict(filter(lambda item: item[0] not in excluded_env_vars, get_env_for_role(desired_role_arn=desired_role_arn).items()))
+        if args.mode == "env":
+            print(','.join([f'{k}="{v}"' for k,v in filter_env_dict.items()]))
+        elif args.mode == "env_values":
+            print(','.join([f'"{v}"' for v in filter_env_dict.values()]))
+    
 if __name__ == "__main__":
     main()
