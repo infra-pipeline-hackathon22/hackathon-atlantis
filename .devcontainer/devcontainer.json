@@ -46,12 +46,9 @@
 		"bazel.enableCodeLens": true
 	},
 	"containerEnv": {
-		// used with the postCreateCommand to log into aws via SSO.  Assumes a profile has been configured in the 
-		// host users ~/.aws/config file (see volume mounts below)   
-		"SSO_PROFILE": "${env:BURNER_SSO_PROFILE}",
 		// profile to use after login via SSO profile.  Usually this maps to an role assumption in a bespoke account
-		"AWS_PROFILE": "${env:BURNER_AWS_PROFILE}",
-		"AWS_REGION": "ap-southeast-2",
+		"AWS_PROFILE": "${env:AWS_PROFILE}",
+		"AWS_REGION": "us-west-2",
 		"REPO_HOME": "${containerWorkspaceFolder}",
 		"REPO_ROOT": "${containerEnv:REPO_HOME}",
 		"REPO_HOME_HOST": "${localWorkspaceFolder}",
@@ -63,7 +60,7 @@
 	// update Dockerfile with your user's UID/GID if not 1000.
 	"runArgs": [ 
 		"-v", "/var/run/docker.sock.raw:/var/run/docker.sock",
-		"-v", "${env:HOME}/.aws:/home/vscode/.aws",
+		"-v", "${env:HOME}/.aws/config-burner:/home/vscode/.aws/config",
 		"-v", "${env:HOME}/.gitconfig:/home/vscode/.gitconfig",
 		"-u", "vscode",
 //		"-v", "${localWorkspaceFolder}/.devcontainer/mount/nix-store:/nix/store",
