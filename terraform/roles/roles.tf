@@ -5,6 +5,12 @@ terraform {
       version = "~> 3.0"
     }
   }
+  backend "s3" {
+    dynamodb_table = "terraform-lock"
+    bucket         = "atlantis-hackathon-terraform-state"
+    region         = "us-west-2"
+    key            = "terraform/roles"
+  }
 }
 
 variable "role" {
@@ -18,14 +24,6 @@ variable "role" {
 
 provider "aws" {
   region = "us-west-2"
-  dynamic "assume_role" {
-    for_each = var.role
-    content {
-      role_arn = assume_role.value.role_arn
-      session_name = assume_role.value.session_name
-    }
-  }
-
 }
 
 module "atlantis_role" {
