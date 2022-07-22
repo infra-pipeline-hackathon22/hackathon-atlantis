@@ -15,6 +15,7 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_instance" "web" {
+  vpc_id        = "vpc-00db067cd1a778d52"
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
 
