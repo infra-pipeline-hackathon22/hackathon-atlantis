@@ -1,9 +1,9 @@
 # hackathon-atlantis
-2022 hackathon, using atlantis to make terraform deploys easier
+2022 hackathon, using [Atlantis](https://www.runatlantis.io/) to make terraform deploys easier
 
 ## Overview
 
-This is a proof of concept that was done as part of Canva's 2022 "Design for Change" hackathon.  Those internal to Canva can see the project submission page [here](https://canvadev.atlassian.net/wiki/spaces/HACK/pages/2718828978/Better+Infra+Changes+with+Atlantis)
+This is a proof of concept that was done as part of Canva's 2022 "Design for Change" hackathon.  Those internal to Canva can see the project submission page [here](https://canvadev.atlassian.net/wiki/spaces/HACK/pages/2718828978/Better+Infra+Changes+with+Atlantis).  
 
 The PoC tackles the problem of:
 
@@ -16,7 +16,7 @@ This PoC was originally stood up and operated in a Canva AWS Burner Account.  It
       - Ingress via ALB (webhooks, links to Atlantis runs)
       - Integration with demonstration roles 
       - IRSA for allowing the Atlantis server pods access to view (all) infra in Burner Account
-    - Helm chart `values.yaml` to configure Atlantis server for our use
+    - Helm chart `values.yaml` to configure [Atlantis server](https://github.com/runatlantis/atlantis) for our use
       - Has a customized "workflow" that allows us to hook in Canva specific requirements
     - GitHub Application
     - GitHub Container Registry for Customized Atlantis server image
