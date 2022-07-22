@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "test_bucket" {
   bucket_prefix = "atlantis-test-"
+  acl    = "public-read"
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
