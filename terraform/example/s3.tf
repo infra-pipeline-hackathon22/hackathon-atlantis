@@ -11,13 +11,4 @@ resource "aws_s3_bucket" "test_bucket" {
   versioning {
     enabled = true
   }
-
-  lifecycle_rule {
-    id      = "transition-objects-to-glacier"
-    enabled = true
-    transition {
-      days          = 365
-      storage_class = "GLACIER"
-    }
-  }
 }
