@@ -5,8 +5,8 @@
 3. Run the following:
 ```
 IMAGE="ghcr.io/infra-pipeline-hackathon22/python-atlantis"
-TAG="v0.0.2"
-docker build -f Dockerfile -t ${IMAGE}:${TAG} . 
+TAG="v0.0.3"
+DOCKER_BUILDKIT=1 docker build -f Dockerfile -t ${IMAGE}:${TAG} . 
 ```
 4. Push image
 ```
