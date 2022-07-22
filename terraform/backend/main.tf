@@ -7,6 +7,10 @@ terraform {
   }
 }
 
+provider "aws" {
+  region = "us-west-2"
+}
+
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "atlantis-hackathon-terraform-state"
   # Enable versioning so we can see the full revision history of our
@@ -32,8 +36,4 @@ resource "aws_dynamodb_table" "terraform_locks" {
     name = "LockID"
     type = "S"
   }
-}
-
-provider "aws" {
-  region = "us-west-2"
 }
