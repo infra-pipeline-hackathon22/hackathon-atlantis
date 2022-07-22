@@ -22,19 +22,19 @@ This PoC was originally stood up and operated in a Canva AWS Burner Account.  It
     - GitHub Container Registry for Customized Atlantis server image
     - VSCode Remote Containers development image
 
-### Custom image server
+### Custom image Atlantis server
 
 The custom Atlantis server includes a [python script](docker/python/role_checker.py) that hooks into the Atlantis Plan/Apply workflows.  It is responsible for checking the role that the user is assigned and making sure they it exists and they can assume it.  It is largely a standin for the permission engine
 
 ## Setup
 
-1. Create Kubernetes Cluster (terragrunt coming soon)
+1. [Create Kubernetes Cluster and Account Prereqs](terragrunt/README.md) (with terragrunt)
 2. [Configure and install Atlantis helm chart](helm/atlantis/README.md)
 3. Create and/or Integration with GitHub App
 
 ## Development
 
-Instructions for continuing development within this repo
+Instructions for continuing development within this repo.
 
 ### Custom Atlantis Image
 
