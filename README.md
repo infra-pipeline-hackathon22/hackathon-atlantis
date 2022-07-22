@@ -3,7 +3,7 @@
 
 ## Overview
 
-This is a proof of concept that was done as part of Canva's 2022 "Design for Change" hackathon.  Those internal to Canva can see the project submission page [here](https://canvadev.atlassian.net/wiki/spaces/HACK/pages/2718828978/Better+Infra+Changes+with+Atlantis).  
+This is a proof of concept that was done as part of [Canva's](https://www.canva.com/) 2022 "Design for Change" hackathon.  Those internal to Canva can see the project submission page [here](https://canvadev.atlassian.net/wiki/spaces/HACK/pages/2718828978/Better+Infra+Changes+with+Atlantis).  
 
 The PoC tackles the problem of:
 
