@@ -101,8 +101,8 @@ serviceAccountSecrets:
 image:
   repository: ghcr.io/infra-pipeline-hackathon22/python-atlantis
   tag: v0.0.9
-#  pullPolicy: IfNotPresent
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
+#  pullPolicy: Always
 
 ## Optionally specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
@@ -114,12 +114,12 @@ image:
 ## Use Server Side Repo Config,
 ## ref: https://www.runatlantis.io/docs/server-side-repo-config.html
 ## Example default configuration
-#   apply_requirements: [ approved ]
+#   apply_requirements: [ approved, mergeable ]
 repoConfig: |
  ---
  repos:
  - id: /.*/
-   apply_requirements: [ approved, mergeable ]
+   apply_requirements: [ mergeable ]
    workflow: default
    allowed_overrides: []
    allow_custom_workflows: false
