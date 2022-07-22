@@ -33,11 +33,7 @@ def get_desired_role_info(user: str, desired_role: str) -> Dict[str,str]:
 
 def get_env_for_role(desired_role_arn:str)->Dict[str,str]:
     client = boto3.client('sts')
-    # return {
-    #     "AWS_ACCESS_KEY_ID":"foo",
-    #     "AWS_SECRET_ACCESS_KEY":"bar",
-    #     "AWS_SESSION_TOKEN":"baz"
-    # }
+
     assumed_role_object=client.assume_role(RoleArn=desired_role_arn, RoleSessionName="mys3role")
     # From the response that contains the assumed role, get the temporary 
     # credentials that can be used to make subsequent API calls

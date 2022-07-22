@@ -119,7 +119,7 @@ repoConfig: |
  ---
  repos:
  - id: /.*/
-   apply_requirements: [ mergeable ]
+   apply_requirements: [ approved, mergeable ]
    workflow: default
    allowed_overrides: []
    allow_custom_workflows: false
@@ -132,8 +132,10 @@ repoConfig: |
        steps:
        - run: /python/role_checker.py --user ${USER_NAME} --desired_role ${COMMENT_ARGS}
        - multienv: /python/role_checker.py --user ${USER_NAME} --desired_role ${COMMENT_ARGS} --mode env
-       - run: echo "ENV is $(env)"
        - run: unset AWS_ROLE_ARN; unset AWS_WEB_IDENTITY_TOKEN_FILE; terraform apply -input=false $PLANFILE
+
+# For testing in workflow
+#       - run: echo "ENV is $(env)"
 
 # allowForkPRs enables atlantis to run on a fork Pull Requests
 allowForkPRs: false
