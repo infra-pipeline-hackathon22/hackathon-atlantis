@@ -215,6 +215,8 @@ RUN /usr/local/bin/python -m pip install -U pytest --user && \
 
 COPY --chown=vscode workspace-setup/zshrc.template /home/vscode/.zshrc
 
+RUN mkdir /home/vscode/.aws
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
 
