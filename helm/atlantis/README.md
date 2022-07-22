@@ -31,7 +31,9 @@ helm repo add runatlantis https://runatlantis.github.io/helm-charts
 3. Set the following sensitive environment variables in your environment
 
 ```
-
+KEY_FILE="<LOCATION TO PEM FOR GITHUB APP>"
+GITHUB_APP_ID="<REPLACE WITH GITHUB APP ID>"
+GITHUB_SECRET="<REPLACE WITH GITHUB SECRET>"
 ```
 
 4. Run the following command from the command line
