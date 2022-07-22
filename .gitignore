@@ -37,3 +37,6 @@ override.tf.json
 # VSCode
 .vscode/
 !**/workspace-setup/.vscode
+
+# MacOS
+.DS_Store
