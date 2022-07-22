@@ -100,9 +100,9 @@ serviceAccountSecrets:
 
 image:
   repository: ghcr.io/infra-pipeline-hackathon22/python-atlantis
-  tag: v0.0.3
-  pullPolicy: IfNotPresent
-#  pullPolicy: Always
+  tag: v0.0.9
+#  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 ## Optionally specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
@@ -119,17 +119,17 @@ repoConfig: |
  ---
  repos:
  - id: /.*/
-   apply_requirements: [ ]
+   apply_requirements: [ mergeable ]
    workflow: default
    allowed_overrides: []
    allow_custom_workflows: false
+   delete_source_branch_on_merge: false
  workflows:
    default:
      plan:
        steps: [init, plan]
      apply:
        steps:
-       - run: echo "before ENV is $(env)"
        - run: /python/role_checker.py --user ${USER_NAME} --desired_role ${COMMENT_ARGS}
        - multienv: /python/role_checker.py --user ${USER_NAME} --desired_role ${COMMENT_ARGS} --mode env
        - run: echo "ENV is $(env)"
@@ -366,7 +366,8 @@ initContainers: []
 #     - bbb.com
 #     ip: 10.0.0.2
 
-extraArgs: []
+extraArgs: 
+  - --automerge
 # extraArgs:
 # - --disable-autoplan
 # - --disable-repo-locking
