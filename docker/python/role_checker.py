@@ -46,7 +46,8 @@ def get_env_for_role(desired_role_arn:str)->Dict[str,str]:
     return {
         "AWS_ACCESS_KEY_ID":credentials['AccessKeyId'],
         "AWS_SECRET_ACCESS_KEY":credentials['SecretAccessKey'],
-        "AWS_SESSION_TOKEN":credentials['SessionToken']
+        "AWS_SESSION_TOKEN":credentials['SessionToken'],
+        "DUMMY_VAL":"Dummy"
     }
 
 
@@ -68,9 +69,9 @@ def main():
         excluded_env_vars=args.env_exclude.split(",")
         filter_env_dict=dict(filter(lambda item: item[0] not in excluded_env_vars, get_env_for_role(desired_role_arn=desired_role_arn).items()))
         if args.mode == "env":
-            print(','.join([f'{k}="{v}"' for k,v in filter_env_dict.items()]))
+            print(','.join([f'{k}={v}' for k,v in filter_env_dict.items()]), end='')
         elif args.mode == "env_values":
-            print(','.join([f'"{v}"' for v in filter_env_dict.values()]))
+            print(','.join([f'{v}' for v in filter_env_dict.values()]), end='')
     
 if __name__ == "__main__":
     main()
