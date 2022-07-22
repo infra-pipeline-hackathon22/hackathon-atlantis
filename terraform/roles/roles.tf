@@ -59,6 +59,7 @@ data "aws_iam_policy_document" "power_readwrite" {
     actions = [
       "s3:*",
       "ec2:*",
+      "dynamodb:*",
     ]
     resources = ["*"]
   }
