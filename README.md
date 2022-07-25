@@ -12,15 +12,15 @@ The PoC tackles the problem of:
 
 This PoC was originally stood up and operated in a Canva AWS Burner Account.  It leverages the following components:
 
-    - EKS cluster to house Atlantis server
-      - Ingress via ALB (webhooks, links to Atlantis runs)
-      - Integration with demonstration roles 
-      - IRSA for allowing the Atlantis server pods access to view (all) infra in Burner Account
-    - Helm chart `values.yaml` to configure [Atlantis server](https://github.com/runatlantis/atlantis) for our use
-      - Has a customized "workflow" that allows us to hook in Canva specific requirements
-    - GitHub Application
-    - GitHub Container Registry for Customized Atlantis server image
-    - VSCode Remote Containers development image
+* EKS cluster to house Atlantis server
+  * Ingress via ALB (webhooks, links to Atlantis runs)
+  * Integration with demonstration roles 
+  * IRSA for allowing the Atlantis server pods access to view (all) infra in Burner Account
+* Helm chart `values.yaml` to configure [Atlantis server](https://github.com/runatlantis/atlantis) for our use
+  * Has a customized "workflow" that allows us to hook in Canva specific requirements
+* GitHub Application
+* GitHub Container Registry for Customized Atlantis server image
+* VSCode Remote Containers development image
 
 ### Custom image Atlantis server
 
