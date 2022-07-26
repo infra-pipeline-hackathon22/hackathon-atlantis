@@ -7,4 +7,9 @@ resource "aws_dynamodb_table" "terraform_locks" {
     name = "User"
     type = "S"
   }
+
+  tags = {
+    Name        = "dynamodb-table-1"
+    Environment = "production"
+  }
 }
